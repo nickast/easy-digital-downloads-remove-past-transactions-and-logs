@@ -143,8 +143,14 @@ function edd_delete_transactions( $data ) {
 		//echo "Delet Log Meta:<br/>";
 		delete_log_meta();
 
+		//delete wp_term_relationships records
+		delete_taxonomy_records();
+
 		//echo "Delet Transactions and logs:<br/>";
 		delete_transactions_and_logs();
+
+		//delete the count of records in the wp_term_taxonomy
+		update_earning_count();
 
 	} else {
 		echo 'unable to verify nonce';
@@ -163,7 +169,21 @@ function delete_product_earnings_meta(){
 		array_push($download_ids, $download->ID);
 	}
 
-	delete_product_postmeta_records($download_ids);
+	update_product_postmeta_records($download_ids);
+}
+
+function delete_taxonomy_records(){
+		//get all logs meta
+	$all_logs = new WP_Query(array('post_type' => 'edd_log', 'posts_per_page' => -1));
+	if(!$all_logs)
+		return;
+
+	$log_ids = array();
+	foreach ($all_logs->posts as $log) {
+		array_push($log_ids, $log->ID);
+	}
+	
+	delete_term_relationship_records($log_ids);
 }
 
 function delete_payment_meta(){
@@ -194,3 +214,4 @@ function delete_log_meta(){
 
 	delete_logs_postmeta_records($log_ids);
 }
+

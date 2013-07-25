@@ -2,7 +2,7 @@
 
 $query_results = array();
 
-function delete_product_postmeta_records($downloadable_products = array()){
+function update_product_postmeta_records($downloadable_products = array()){
 
 	global $wpdb, $query_results;
 
@@ -94,6 +94,25 @@ function delete_logs_postmeta_records($logs = array()){
 
 }
 
+function delete_term_relationship_records($log_ids = array()){
+
+	global $wpdb;
+
+	foreach ($log_ids as $id) {
+
+		$query = "
+			DELETE 
+			FROM ".$wpdb->prefix."term_relationships
+			WHERE object_id = $id
+		";
+
+		//array($query_results, $wpdb->query($query));
+		//echo $query."<br/>";
+		$wpdb->query($query);
+	}
+
+}
+
 function delete_transactions_and_logs(){
 
 	global $wpdb, $query_results;
@@ -116,8 +135,17 @@ function delete_transactions_and_logs(){
 	}
 }
 
-function get_transactions_of_the_products($args = array()){
+function update_earning_count(){
 
+	global $wpdb;
+
+	//delete all the sale records on the table 'wp_term_taxonomy'
+	$query = "
+		UPDATE ".$wpdb->prefix."term_taxonomy
+		SET count = 0
+		AND taxonomy = 'edd_log_type'
+	";
+
+	$wpdb->query($query);
 }
-
 
