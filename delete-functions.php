@@ -2,11 +2,11 @@
 
 $query_results = array();
 
-function delete_product_postmeta_records($transactions = array()){
+function delete_product_postmeta_records($downloadable_products = array()){
 
 	global $wpdb, $query_results;
 
-	if(!$transactions)
+	if(!$downloadable_products)
 		return false;
 
 	$meta_keys = array(
@@ -14,13 +14,13 @@ function delete_product_postmeta_records($transactions = array()){
 		'_edd_download_sales'
 	);
 
-	foreach ($transactions as $transaction) {
+	foreach ($downloadable_products as $product) {
 		foreach ($meta_keys as $key) {
 			$query = "
-				DELETE 
-				FROM ".$wpdb->prefix."postmeta
-				WHERE post_id = $transaction
-				AND meta_key = '".$key."'
+				UPDATE ".$wpdb->prefix."postmeta
+				SET meta_value = 0
+				WHERE post_id = $product
+				AND meta_key = '$key'
 			";
 
 			//array($query_results, $wpdb->query($query));

@@ -87,11 +87,10 @@ function edd_reports_tab_delete() {
 						<p><?php _e( 'Select the data you want to delete from your database', 'edd' ); ?></p>
 						<p>
 							<form method="post">
-								<input type="text" name='name' value='nick'>
-								<input type="checkbox" class='delete-items' name='edd_checkbox[delete_partially]' value='0'><label>Delete Product Earnings</label><br/>
-								<input type="checkbox" class='delete-items' name='edd_checkbox[delete_partially]' value='1'><label>Delete Purchase Meta records</label><br/>
-								<input type="checkbox" class='delete-items' name='edd_checkbox[delete_partially]' value='2'><label>Delete Log Meta</label><br/>
-								<input type="checkbox" class='delete-items' name='edd_checkbox[delete_partially]' value='3'><label>Delete Transactions & Logs</label><br/>
+								<input type="checkbox" class='delete-items' name='delete[earnings]' value='1'><label>Delete Product Earnings</label><br/>
+								<input type="checkbox" class='delete-items' name='delete[purchase_meta]' value='1'><label>Delete Purchase Meta records</label><br/>
+								<input type="checkbox" class='delete-items' name='delete[log_meta]' value='1'><label>Delete Log Meta</label><br/>
+								<input type="checkbox" class='delete-items' name='delete[transaction_and_logs]' value='1'><label>Delete Transactions & Logs</label><br/>
 								
 								<input type="hidden" name="edd-action" value="partially_delete_items"/>
 								<input type="submit" value="<?php _e( 'Delete Data', 'edd' ); ?>" class="button-secondary delete-button"/>
@@ -99,7 +98,6 @@ function edd_reports_tab_delete() {
 						</p>
 					</div><!-- .inside -->
 				</div><!-- .postbox -->
-				
 
 				<?php do_action( 'edd_reports_tab_delete_content_bottom' ); ?>
 
@@ -110,8 +108,23 @@ function edd_reports_tab_delete() {
 }
 add_action( 'edd_reports_tab_delete', 'edd_reports_tab_delete' );
 
-function edd_partially_delete_items(){
+function edd_partially_delete_items($post_values){
 	
+	if(!isset($post_values['delete']))
+		return;
+
+	if(isset($checked_options['earnings']))
+		delete_product_earnings_meta();
+
+	if(isset($checked_options['purchase_meta']))
+		delete_payment_meta();
+
+	if(isset($checked_options['log_meta']))
+		delete_log_meta();
+
+	if(isset($checked_options['transaction_and_logs']))
+		delete_transactions_and_logs();
+
 }
 add_action('edd_partially_delete_items', 'edd_partially_delete_items');
 
