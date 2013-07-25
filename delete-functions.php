@@ -1,10 +1,8 @@
 <?php
 
-$query_results = array();
-
 function update_product_postmeta_records($downloadable_products = array()){
 
-	global $wpdb, $query_results;
+	global $wpdb;
 
 	if(!$downloadable_products)
 		return false;
@@ -23,17 +21,21 @@ function update_product_postmeta_records($downloadable_products = array()){
 				AND meta_key = '$key'
 			";
 
-			//array($query_results, $wpdb->query($query));
-			//echo $query."<br/>";
-			$wpdb->query($query);
+			if(!$wpdb->query($query)){
+				
+			}
 		}
 	}
+
+	//return count($errors) == 0 ? 1 : -1;
 
 }
 
 function delete_payment_postmeta_records($payment_ids = array()){
 
-	global $wpdb, $query_results;
+	global $wpdb;
+
+	$errors = array();
 
 	if(!$payment_ids)
 		return false;
@@ -58,11 +60,13 @@ function delete_payment_postmeta_records($payment_ids = array()){
 				AND meta_key = '".$key."'
 			";
 
-			//array($query_results, $wpdb->query($query));
-			//echo $query."<br/>";
-			$wpdb->query($query);
+			if(!$wpdb->query($query)){
+
+			}
 		}
 	}
+
+	//return count($errors) == 0 ? true : false;
 
 }
 

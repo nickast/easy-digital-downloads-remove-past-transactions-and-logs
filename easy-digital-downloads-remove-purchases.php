@@ -156,42 +156,42 @@ function edd_delete_transactions( $data ) {
 		 * task: delete keys: _edd_download_earnings / _edd_download_sales
 		 * connected with: download ids of the posts table
 		**/
-		delete_product_earnings_meta();
+		$res[] = update_product_earnings_meta();
 		
 		/**
 		 * table: postmeta
 		 * task: delete keys: _edd_payment_gateway / _edd_payment_meta / _edd_payment_mode / _edd_payment_purchase_key / _edd_payment_total / _edd_payment_user_email / _edd_payment_user_id / _edd_payment_user_ip
 		 * connected with: edd_payment ids of the posts table
 		**/
-		delete_payment_meta();
+		$res[] = delete_payment_meta();
 
 		/**
 		 * table: postmeta
 		 * task: delete keys: _edd_log_payment_id / _edd_log_ip / _edd_log_file_id / _edd_log_user_id / _edd_log_user_info
 		 * connected with: edd_log ids of the posts table
 		**/
-		delete_log_meta();
+		$res[] = delete_log_meta();
 
 		/**
 		 * table: term_relationships
 		 * task: delete all records
 		 * connected with: edd_log ids of the posts table
 		**/
-		delete_taxonomy_records();
+		$res[] = delete_taxonomy_records();
 
 		/**
 		 * table: posts
 		 * task: delete all records of the type edd_log and edd_payment
 		 * connected with: no dependancies
 		**/
-		delete_transactions_and_logs();
+		$res[] = delete_transactions_and_logs();
 
 		/**
 		 * table: term_taxonomy
 		 * task: update all records in the table by making all values of the count column with edd_log_type identifier equal to 0
 		 * connected with: no dependancies
 		**/
-		update_earning_count();
+		$res[] = update_earning_count();
 
 		/* show an success message when everything is OK */
 		add_action('admin_notices', 'edd_successfull_deletion_of_all_records');
@@ -202,7 +202,7 @@ function edd_delete_transactions( $data ) {
 }
 add_action( 'edd_delete_transactions', 'edd_delete_transactions' );
 
-function delete_product_earnings_meta(){
+function update_product_earnings_meta(){
 	//delete the transaction earnings
 	$all_downloads = new WP_Query(array('post_type' => 'download', 'posts_per_page' => -1));
 	if(!$all_downloads)
@@ -213,7 +213,7 @@ function delete_product_earnings_meta(){
 		array_push($download_ids, $download->ID);
 	}
 
-	update_product_postmeta_records($download_ids);
+	return update_product_postmeta_records($download_ids);
 }
 
 function delete_taxonomy_records(){
@@ -227,7 +227,7 @@ function delete_taxonomy_records(){
 		array_push($log_ids, $log->ID);
 	}
 
-	delete_term_relationship_records($log_ids);
+	return delete_term_relationship_records($log_ids);
 }
 
 function delete_payment_meta(){
@@ -241,7 +241,7 @@ function delete_payment_meta(){
 		array_push($payments_ids, $payment->ID);
 	}
 
-	delete_payment_postmeta_records($payments_ids);
+	return delete_payment_postmeta_records($payments_ids);
 
 }
 
@@ -256,6 +256,6 @@ function delete_log_meta(){
 		array_push($log_ids, $log->ID);
 	}
 
-	delete_logs_postmeta_records($log_ids);
+	return delete_logs_postmeta_records($log_ids);
 }
 
