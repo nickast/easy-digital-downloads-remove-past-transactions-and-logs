@@ -31,6 +31,7 @@ require_once('delete-functions.php');
 
 add_action('init','check_edd_existance');
 function check_edd_existance(){
+
 	$edd_slug = 'easy-digital-downloads';
 
 	if(!is_plugin_active_from_slug($edd_slug)){
@@ -162,14 +163,13 @@ function edd_delete_transactions( $data ) {
 		//delete wp_term_relationships records
 		delete_taxonomy_records();
 
-		//delete other logs like file downloads from postmeta
-		//delete_other_logs();
-
 		//echo "Delet Transactions and logs:<br/>";
 		delete_transactions_and_logs();
 
 		//delete the count of records in the wp_term_taxonomy
 		update_earning_count();
+
+		add_action('admin_notices', 'edd_successfull_deletion_of_all_records');
 
 	} else {
 		echo 'unable to verify nonce';
