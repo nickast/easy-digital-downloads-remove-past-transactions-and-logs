@@ -26,7 +26,23 @@ License:
 
 */
 
+require_once('helpers.php');
 require_once('delete-functions.php');
+
+add_action('init','check_edd_existance');
+function check_edd_existance(){
+	$edd_slug = 'easy-digital-downloads';
+
+	if(!is_plugin_active_from_slug($edd_slug)){
+		if(is_admin())
+			// give admin notice
+			add_action('admin_notices', 'edd_does_not_exist_notice');
+		else
+			// halt plugin in front end
+			return;	
+	}
+
+}
 
 add_filter('edd_reports_contextual_help', 'add_delete_help_screen',10,1);
 function add_delete_help_screen($screen){
