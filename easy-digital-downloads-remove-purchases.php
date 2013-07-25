@@ -151,24 +151,49 @@ function edd_delete_transactions( $data ) {
 
 	if ( wp_verify_nonce( $edd_delete_transaction, 'edd_delete_transactions' ) ) {
 		
-		//echo "Delet Product Earnings:<br/>";
+		/**
+		 * table: postmeta
+		 * task: delete keys: _edd_download_earnings / _edd_download_sales
+		 * connected with: download ids of the posts table
+		**/
 		delete_product_earnings_meta();
 		
-		//echo "Delet Payment Meta:<br/>";
+		/**
+		 * table: postmeta
+		 * task: delete keys: _edd_payment_gateway / _edd_payment_meta / _edd_payment_mode / _edd_payment_purchase_key / _edd_payment_total / _edd_payment_user_email / _edd_payment_user_id / _edd_payment_user_ip
+		 * connected with: edd_payment ids of the posts table
+		**/
 		delete_payment_meta();
 
-		//echo "Delet Log Meta:<br/>";
+		/**
+		 * table: postmeta
+		 * task: delete keys: _edd_log_payment_id / _edd_log_ip / _edd_log_file_id / _edd_log_user_id / _edd_log_user_info
+		 * connected with: edd_log ids of the posts table
+		**/
 		delete_log_meta();
 
-		//delete wp_term_relationships records
+		/**
+		 * table: term_relationships
+		 * task: delete all records
+		 * connected with: edd_log ids of the posts table
+		**/
 		delete_taxonomy_records();
 
-		//echo "Delet Transactions and logs:<br/>";
+		/**
+		 * table: posts
+		 * task: delete all records of the type edd_log and edd_payment
+		 * connected with: no dependancies
+		**/
 		delete_transactions_and_logs();
 
-		//delete the count of records in the wp_term_taxonomy
+		/**
+		 * table: term_taxonomy
+		 * task: update all records in the table by making all values of the count column with edd_log_type identifier equal to 0
+		 * connected with: no dependancies
+		**/
 		update_earning_count();
 
+		/* show an success message when everything is OK */
 		add_action('admin_notices', 'edd_successfull_deletion_of_all_records');
 
 	} else {
