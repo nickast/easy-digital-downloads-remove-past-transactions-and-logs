@@ -75,6 +75,10 @@ function delete_logs_postmeta_records($logs = array()){
 
 	$meta_keys = array(
 		'_edd_log_payment_id',
+		'_edd_log_ip',
+		'_edd_log_file_id',
+		'_edd_log_user_id',
+		'_edd_log_user_info'
 	);
 
 	foreach ($logs as $log) {

@@ -146,6 +146,9 @@ function edd_delete_transactions( $data ) {
 		//delete wp_term_relationships records
 		delete_taxonomy_records();
 
+		//delete other logs like file downloads from postmeta
+		//delete_other_logs();
+
 		//echo "Delet Transactions and logs:<br/>";
 		delete_transactions_and_logs();
 
@@ -182,7 +185,7 @@ function delete_taxonomy_records(){
 	foreach ($all_logs->posts as $log) {
 		array_push($log_ids, $log->ID);
 	}
-	
+
 	delete_term_relationship_records($log_ids);
 }
 
