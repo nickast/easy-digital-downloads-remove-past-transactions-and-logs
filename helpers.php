@@ -1,7 +1,7 @@
 <?php
 
 function edd_does_not_exist_notice() {
-	echo '<div id="message" class="error"><p><strong>[Easy Digital Downloads - Remove Purchases] requires the <a href="#">Easy Digital Downloads</a> plugin to be installed and activated.</strong></p></div>';
+	echo '<div id="message" class="error"><p><strong>[Easy Digital Downloads - Remove Past Transactions & Logs] requires the <a target="_blank" href="http://wordpress.org/plugins/easy-digital-downloads/">Easy Digital Downloads</a> plugin to be installed and activated.</strong></p></div>';
 }
 
 function edd_successfull_deletion_of_all_records() {
