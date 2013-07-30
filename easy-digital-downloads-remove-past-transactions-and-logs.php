@@ -90,14 +90,14 @@ function edd_reports_tab_delete() {
 				<?php do_action( 'edd_reports_tab_delete_content_top' ); ?>
 
 				<div class="postbox">
-					<h3><span><?php _e( 'Delete all past transaction', 'edd' ); ?></span></h3>
+					<h3><span><?php _e( 'Delete All Past Transaction & Logs', 'edd' ); ?></span></h3>
 					<div class="inside">
-						<p><?php _e( 'By clicking here you can delete all the past transction.', 'edd' ); ?></p>
+						<p><?php _e( 'By clicking here you can delete all the past transction. <br/>Please ensure that you have a working backup in place. <br/>The action cannot be undone.', 'edd' ); ?></p>
 						<p><a class="button" href="<?php echo wp_nonce_url( add_query_arg( array( 'edd-action' => 'delete_transactions' ) ), 'edd_delete_transactions' ); ?>"><?php _e( 'Delete Transactions', 'edd' ); ?></a></p>
 					</div><!-- .inside -->
 				</div><!-- .postbox -->
 
-				
+				<!--
 				<div class="postbox">
 					<h3><span><?php _e('Custom Delete of Purchases Data', 'edd'); ?></span></h3>
 					<div class="inside">
@@ -113,7 +113,7 @@ function edd_reports_tab_delete() {
 								<input type="submit" value="<?php _e( 'Delete Data', 'edd' ); ?>" class="button-secondary delete-button"/>
 							</form>
 						</p>
-					</div><!-- .inside -->
+					</div><!-- .inside 
 				</div><!-- .postbox -->
 
 				<?php do_action( 'edd_reports_tab_delete_content_bottom' ); ?>
@@ -201,61 +201,4 @@ function edd_delete_transactions( $data ) {
 	}
 }
 add_action( 'edd_delete_transactions', 'edd_delete_transactions' );
-
-function update_product_earnings_meta(){
-	//delete the transaction earnings
-	$all_downloads = new WP_Query(array('post_type' => 'download', 'posts_per_page' => -1));
-	if(!$all_downloads)
-		return;
-
-	$download_ids = array();
-	foreach ($all_downloads->posts as $download) {
-		array_push($download_ids, $download->ID);
-	}
-
-	return update_product_postmeta_records($download_ids);
-}
-
-function delete_taxonomy_records(){
-		//get all logs meta
-	$all_logs = new WP_Query(array('post_type' => 'edd_log', 'posts_per_page' => -1));
-	if(!$all_logs)
-		return;
-
-	$log_ids = array();
-	foreach ($all_logs->posts as $log) {
-		array_push($log_ids, $log->ID);
-	}
-
-	return delete_term_relationship_records($log_ids);
-}
-
-function delete_payment_meta(){
-	//delete the purchase info
-	$all_payments = new WP_Query(array('post_type' => 'edd_payment', 'posts_per_page' => -1));
-	if(!$all_payments)
-		return;
-
-	$payments_ids = array();
-	foreach ($all_payments->posts as $payment) {
-		array_push($payments_ids, $payment->ID);
-	}
-
-	return delete_payment_postmeta_records($payments_ids);
-
-}
-
-function delete_log_meta(){
-	//get all logs meta
-	$all_logs = new WP_Query(array('post_type' => 'edd_log', 'posts_per_page' => -1));
-	if(!$all_logs)
-		return;
-
-	$log_ids = array();
-	foreach ($all_logs->posts as $log) {
-		array_push($log_ids, $log->ID);
-	}
-
-	return delete_logs_postmeta_records($log_ids);
-}
 
